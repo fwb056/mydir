@@ -82,7 +82,43 @@ drwxr-xr--   3 ***************  ***************    96  8 10 16:13 mydir
 ```
 
 ### 3. Docker 설치 및 기본 점검
-```
+ * Docker 버전 확인 결과를 기록한다.
+ * Docker 데몬 동작 여부 확인 결과를 기록한다.
+```bash
+# 서울 캠퍼스 환경에 맞추어, OrbStack을 실행 후 진행
+***************@****** % docker --version                    ## Docker 버전 확인
+Docker version 28.5.2, build ecc6942
+***************@****** % docker info                         # 권한 확인
+Client:
+ Version:    28.5.2
+ Context:    orbstack
+ Debug Mode: false
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.29.1
+    Path:     /Users/limdh9804252257/.docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v2.40.3
+    Path:     /Users/limdh9804252257/.docker/cli-plugins/docker-compose
+
+Server:
+ Containers: 0
+  Running: 0
+  Paused: 0
+  Stopped: 0
+ Images: 0
+ Server Version: 28.5.2
+...
+(중략)
+...
+   Base: 192.168.229.0/24, Size: 24
+   Base: 192.168.237.0/24, Size: 24
+   Base: 192.168.239.0/24, Size: 24
+   Base: 192.168.242.0/24, Size: 24
+   Base: 192.168.247.0/24, Size: 24
+   Base: fd07:b51a:cc66:d000::/56, Size: 64
+
+WARNING: DOCKER_INSECURE_NO_IPTABLES_RAW is set
 ```
 
 ### 4. Docker 기본 운영 명령 수행

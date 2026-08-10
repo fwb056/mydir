@@ -44,6 +44,15 @@ index.html
 ***************@****** mydir % cd                            # 현재 위치 이동
 ***************@****** ~ % ls                                # 목록 확인
 Desktop		Documents	Downloads	indexNew.html	Library		Movies		Music		mydir		Pictures	Public
+
+***************@****** ~ % rm indexNew.html                  # 파일 삭제
+***************@****** ~ % ls                                # 목록 확인
+Desktop		Documents	Downloads	Library		Movies		Music		mydir		Pictures	Public
+
+# index.html의 내용을 vscode를 통해 "Hello, Docker!"로 수정
+***************@****** ~ % cd mydir                          # 현재 위치 이동
+***************@****** mydir % cat index.html                # 파일 내용 확인
+"Hello, Docker!"%
 ```
 
 ### 2.

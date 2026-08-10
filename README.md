@@ -130,12 +130,19 @@ WARNING: DOCKER_INSECURE_NO_IPTABLES_RAW is set
 ***************@****** ~ % docker images                     ## 이미지 목록 확인
 REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
 
-***************@****** ~ % docker run hello-world            ## 이미지 다운로드
-Unable to find image 'hello-world:latest' locally
+***************@****** ~ % docker pull hello-world            ## 이미지 다운로드
+Using default tag: latest
 latest: Pulling from library/hello-world
 4f55086f7dd0: Pull complete 
 Digest: sha256:7f4da0fc94bcece205a8c0b6f4d11c8196924654ffe5c4d1aa439b7f632048b2
 Status: Downloaded newer image for hello-world:latest
+docker.io/library/hello-world:latest
+***************@****** ~ % docker images                     # 이미지 목록 확인
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+hello-world   latest    e2ac70e7319a   4 months ago   10.1kB
+```
+```bash
+***************@****** ~ % docker run --name testcont hello-world      ## 컨테이너 생성/실행
 
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
@@ -158,14 +165,22 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 
-***************@****** ~ % docker images                     # 이미지 목록 확인
-REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
-hello-world   latest    e2ac70e7319a   4 months ago   10.1kB
-```
-```bash
 
+***************@****** ~ % docker ps -a                      ## 컨테이너 목록 확인
+CONTAINER ID   IMAGE         COMMAND    CREATED              STATUS                          PORTS     NAMES
+15ce56597763   hello-world   "/hello"   About a minute ago   Exited (0) About a minute ago             testcont
+
+***************@****** ~ % docker stop testcont              ## 컨테이너 중지
+testcont
+***************@****** ~ % docker ps -a                      # 컨테이너 목록 확인
+CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
+15ce56597763   hello-world   "/hello"   3 minutes ago   Exited (0) 3 minutes ago             testcont
 ```
 ```bash
+***************@****** ~ % docker ps -a                      # 컨테이너 목록 확인
+***************@****** ~ % docker ps -a                      # 컨테이너 목록 확인
+***************@****** ~ % docker ps -a                      # 컨테이너 목록 확인
+***************@****** ~ % docker ps -a                      # 컨테이너 목록 확인
 ```
 ```bash
 ```

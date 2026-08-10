@@ -19,14 +19,20 @@
 ### 1. 터미널 조작 로그 기록
  * 현재 위치 확인, 목록 확인(숨김 파일 포함), 이동, 생성, 복사, 이동/이름변경, 삭제
 ```bash
-***************@****** ~ % pwd
+***************@****** ~ % pwd      # 현재 위치 확인
 /Users/***************
-***************@****** ~ % ls -a
+***************@****** ~ % ls -a    # 목록 확인(숨김 파일 포함)
 .			.CFUserTextEncoding	.vscode			Desktop			Downloads		Movies			Public
 ..			.Trash			.zsh_sessions		Documents		Library			Music			Pictures
-***************@****** ~ % mkdir mydir
-***************@****** ~ % ls
+***************@****** ~ % mkdir mydir  # 디렉토리 생성
+***************@****** ~ % ls        # 목록 확인
 Desktop		Documents	Downloads	Library		Movies		Music		mydir		Pictures	Public
+***************@****** ~ % cd mydir   # 디렉토리 이동
+***************@****** mydir % touch index.html              # 파일 생성
+***************@****** mydir % cp index.html index2.html     # 복사
+***************@****** mydir % ls                            # 목록 확인
+index.html	index2.html
+
 ```
 
    

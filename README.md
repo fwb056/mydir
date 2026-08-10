@@ -16,7 +16,21 @@
 
 ---
 
-### 1. 
+### 1. 터미널 조작 로그 기록
+ * 현재 위치 확인, 목록 확인(숨김 파일 포함), 이동, 생성, 복사, 이동/이름변경, 삭제
+```bash
+***************@****** ~ % pwd
+/Users/***************
+***************@****** ~ % ls -a
+.			.CFUserTextEncoding	.vscode			Desktop			Downloads		Movies			Public
+..			.Trash			.zsh_sessions		Documents		Library			Music			Pictures
+***************@****** ~ % mkdir mydir
+***************@****** ~ % ls
+Desktop		Documents	Downloads	Library		Movies		Music		mydir		Pictures	Public
+```
+
+   
+ * 파일 내용 확인, 빈 파일 생성
 
 ### 2.
 

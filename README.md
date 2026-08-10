@@ -88,7 +88,7 @@ drwxr-xr--   3 ***************  ***************    96  8 10 16:13 mydir
 # 서울 캠퍼스 환경에 맞추어, OrbStack을 실행 후 진행
 ***************@****** % docker --version                    ## Docker 버전 확인
 Docker version 28.5.2, build ecc6942
-***************@****** % docker info                         # 권한 확인
+***************@****** % docker info                         ## info 확인
 Client:
  Version:    28.5.2
  Context:    orbstack

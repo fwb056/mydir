@@ -96,10 +96,10 @@ Client:
  Plugins:
   buildx: Docker Buildx (Docker Inc.)
     Version:  v0.29.1
-    Path:     /Users/limdh9804252257/.docker/cli-plugins/docker-buildx
+    Path:     /Users/***************/.docker/cli-plugins/docker-buildx
   compose: Docker Compose (Docker Inc.)
     Version:  v2.40.3
-    Path:     /Users/limdh9804252257/.docker/cli-plugins/docker-compose
+    Path:     /Users/***************/.docker/cli-plugins/docker-compose
 
 Server:
  Containers: 0
@@ -111,12 +111,12 @@ Server:
 ...
 (중략)
 ...
-   Base: 192.168.229.0/24, Size: 24
-   Base: 192.168.237.0/24, Size: 24
-   Base: 192.168.239.0/24, Size: 24
-   Base: 192.168.242.0/24, Size: 24
-   Base: 192.168.247.0/24, Size: 24
-   Base: fd07:b51a:cc66:d000::/56, Size: 64
+   Base: ***.***.***.*/**, Size: 24
+   Base: ***.***.***.*/**, Size: 24
+   Base: ***.***.***.*/**, Size: 24
+   Base: ***.***.***.*/**, Size: 24
+   Base: ***.***.***.*/**, Size: 24
+   Base: ****:****:****:****::/**, Size: 64
 
 WARNING: DOCKER_INSECURE_NO_IPTABLES_RAW is set
 ```
@@ -206,16 +206,72 @@ CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O   BLOCK
 
 
 ```
-```bash
-***************@****** ~ % docker ps -a                      # 컨테이너 목록 확인
-***************@****** ~ % docker ps -a                      # 컨테이너 목록 확인
-```
 ### 5. 컨테이너 실행 실습
+ * hello-world 실행 성공을 기록한다
+ * ubuntu 컨테이너를 실행하고 내부 진입 후 간단 명령 수행 결과를 기록한다.
+ * 컨테이너 종료/유지의 차이를 스스로 관찰하고 간단히 정리한다.
 ```bash
+***************@****** ~ % docker run hello-world            ## 컨테이너 실행 실습
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+
+***************@****** ~ % docker run ubuntu:latest           ## ubuntu 컨테이너 실행
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+617772c7d19b: Pull complete 
+a7fb98a8eddd: Pull complete 
+Digest: sha256:678c6550cc43645e08669028bc177f50be4e7c5b8cca677067b1914d4afc7a03
+Status: Downloaded newer image for ubuntu:latest
+
+***************@****** ~ % docker run -it ubuntu:latest /bin/bash     ## 내부 진입
+root@a38433a8d644:/#
+
+root@a38433a8d644:/# ls -a                                    ## 간단한 명령어 실행
+.   .dockerenv  bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+..  .rock       boot  etc  lib   media  opt  root  sbin  sys  usr
+root@a38433a8d644:/# echo "hello world!"                      ##
+hello world!
+root@a38433a8d644:/# exit
+exit
+
+***************@****** ~ % docker start a3843                 #
+a3843
+***************@****** ~ % docker attach a3843                ## attach로 직접 내부에 접속하기
+root@a38433a8d644:/# echo "hello world!"
+hello world!
+root@a38433a8d644:/# read escape sequence                     ## Ctrl+p Ctrl+q로 종료없이 빠져나오기
+
+***************@****** ~ % docker exec a3843 echo "hello world"     ## exec로 명령어만 전송하기
+hello world!
+
 ```
 
 ### 6. 기존 Dockerfile 기반 커스텀 이미지 제작
-```
+```bash
+***************@****** ~ % docker pull hello-world            ## 이미지 다운로드
+
+***************@****** ~ % docker pull hello-world            ## 이미지 다운로드
+***************@****** ~ % docker pull hello-world            ## 이미지 다운로드
 ```
 
 ### 7. 포트 매핑 및 접속 증거

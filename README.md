@@ -267,15 +267,46 @@ hello world!
 ```
 
 ### 6. 기존 Dockerfile 기반 커스텀 이미지 제작
-```bash
-***************@****** ~ % docker pull hello-world            ## 이미지 다운로드
+ * 웹 서버 베이스 이미지를 활용하여 Dockerfile/이미지 기반의 커스텀 이미지를 만들기
 
-***************@****** ~ % docker pull hello-world            ## 이미지 다운로드
-***************@****** ~ % docker pull hello-world            ## 이미지 다운로드
+```
+## 도커파일 작성
+# 1. 베이스 이미지 선택
+FROM nginx:latest
+# 2. 로컬의 index.html을 컨테이너 내부의 nginx 경로로 복사
+COPY ./index.html /usr/share/nginx/html/index.html
+# 3. 80번 포트 개방
+EXPOSE 80
+```
+```bash
+***************@****** mydir % docker build -t my-web-server .      ## 커스텀 이미지 빌드
+[+] Building 11.8s (7/7) FINISHED                                                                     docker:orbstack
+ => [internal] load build definition from Dockerfile                                                             0.2s
+ => => transferring dockerfile: 249B                                                                             0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                  2.5s
+ => [internal] load .dockerignore                                                                                0.1s
+ => => transferring context: 2B                                                                                  0.0s
+ => [internal] load build context                                                                                0.2s
+ => => transferring context: 53B                                                                                 0.0s
+ => [1/2] FROM docker.io/library/nginx:latest@sha256:8541484afbc9c8a5a8a99b379568ebbc957f658583ec9448fc43104229  7.9s
+...
+(중략)
+...
+ => => extracting sha256:5a4222b844e843499b76e3eb9f0088b1812e432c6965a1f50d48efc4d99cd0c9                        0.0s
+ => [2/2] COPY ./index.html /usr/share/nginx/html/index.html                                                     0.4s
+ => exporting to image                                                                                           0.2s
+ => => exporting layers                                                                                          0.1s
+ => => writing image sha256:2cb1a480e067758293a0868a49b8ddb8dbe46e30a25a57cad0b0ab49c84c0b93                     0.0s
+ => => naming to docker.io/library/my-web-server                                                                 0.0s
+
 ```
 
 ### 7. 포트 매핑 및 접속 증거
-```
+```bash
+***************@****** mydir % run -d -p 8080:80 --name my-web my-web-server
+ceca4756d3b589de1190c9029d8ad1a3253daff0624350e34655ea15d7a0da1e
+***************@****** mydir % curl http://localhost:8080           ## 접속
+"Hello, Docker!"% 
 ```
 
 ### 8. Docker 볼륨 영속성 검즘

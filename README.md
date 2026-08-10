@@ -45,17 +45,42 @@ index.html
 ***************@****** ~ % ls                                # 목록 확인
 Desktop		Documents	Downloads	indexNew.html	Library		Movies		Music		mydir		Pictures	Public
 
-***************@****** ~ % rm indexNew.html                  # 파일 삭제
+***************@****** ~ % rm indexNew.html                  ## 파일 삭제
 ***************@****** ~ % ls                                # 목록 확인
 Desktop		Documents	Downloads	Library		Movies		Music		mydir		Pictures	Public
 
 # index.html의 내용을 vscode를 통해 "Hello, Docker!"로 수정
 ***************@****** ~ % cd mydir                          # 현재 위치 이동
-***************@****** mydir % cat index.html                # 파일 내용 확인
+***************@****** mydir % cat index.html                ## 파일 내용 확인
 "Hello, Docker!"%
 ```
 
-### 2.
+### 2. 권한 실습 및 증거 기록
+ * 권한을 확인/변경하는 명령으르 수행하고, 변경 전/후 비교를 기술 문서에 남긴다.
+```bash
+***************@****** mydir % ls -l                         ## 권한 확인
+total 8
+-rw-r--r--  1 ***************  ***************  16  8 10 16:22 index.html
+
+***************@****** mydir % chmod 755 index.html          ## 파일 권한 변경
+***************@****** mydir % ls -l                         # 권한 확인
+total 8
+-rwxr-xr-x  1 ***************  ***************  16  8 10 16:22 index.html
+
+***************@****** mydir % cd                            # 현재 위치 이동
+***************@****** % ls -l                               # 권한 확인
+total 0
+...
+drwxr-xr-x   3 ***************  ***************    96  8 10 16:13 mydir
+...
+***************@****** % chmod 754 mydir                     ## 디렉토리 권한 변경
+***************@****** % ls -l                               # 권한 확인
+total 0
+...
+drwxr-xr--   3 ***************  ***************    96  8 10 16:13 mydir
+...
+
+```
 
 ### 3.
 

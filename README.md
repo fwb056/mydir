@@ -310,7 +310,35 @@ ceca4756d3b589de1190c9029d8ad1a3253daff0624350e34655ea15d7a0da1e
 ```
 
 ### 8. Docker 볼륨 영속성 검즘
-```
+```bash
+limdh9804252257@c5r7s1 ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash
+01b27320c50414dc9fa58ad0e47416203a604a1f78aff175b6c94c105d08a219
+limdh9804252257@c5r7s1 ~ % docker ps -a                                                                                         
+CONTAINER ID   IMAGE           COMMAND                   CREATED         STATUS                      PORTS                                     NAMES
+01b27320c504   my-web-server   "/docker-entrypoint.…"   9 seconds ago   Up 8 seconds                0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-web
+12dd705a51f9   ubuntu:latest   "/bin/bash"               26 hours ago    Exited (137) 23 hours ago                                             hopeful_carver
+limdh9804252257@c5r7s1 ~ % docker exec -it my-web bash -lc "echo hi > /usr/share/nginx/html/hello.txt && cat /usr/share/nginx/html/hello.txt"
+hi
+
+limdh9804252257@c5r7s1 ~ % docker start -a -i my-web
+root@01b27320c504:/usr/share/nginx# cd html/
+
+root@01b27320c504:/usr/share/nginx/html# echo "test complete" > test.txt
+root@01b27320c504:/usr/share/nginx/html# cat test.txt 
+test complete
+root@01b27320c504:/usr/share/nginx/html# exit
+exit
+
+limdh9804252257@c5r7s1 ~ % docker rm my-web                                                                                                 
+my-web
+limdh9804252257@c5r7s1 ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash             
+1f96493c4c4df4fc5d80a711757a2f5f63fff392fb253bdff721020f425e9585
+
+limdh9804252257@c5r7s1 ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/hello.txt"
+hi
+limdh9804252257@c5r7s1 ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/test.txt" 
+test complete
+
 ```
 
 ### 9. Git 설정 및 GitHub 연동

@@ -80,6 +80,11 @@ total 0
 drwxr-xr--   3 ***************  ***************    96  8 10 16:13 mydir
 ...
 ```
+파일 권한 굿자 규칙은 다음과 같다.
+| 디렉토리/파일 | 사용자(User) | 그룹(Group) | 다른사용자(Other) |
+|:----:|:----:|:----:|:----:|
+| d | r(읽기) / w(쓰기) / x(실행) | r / w / x | r / w / x |
+| 1 | 4 / 2 / 1 | 4 / 2 / 1 | 4 / 2 / 1 |
 
 ### 3. Docker 설치 및 기본 점검
  * Docker 버전 확인 결과를 기록한다.
@@ -122,6 +127,9 @@ WARNING: DOCKER_INSECURE_NO_IPTABLES_RAW is set
 ```
 
 ### 4. Docker 기본 운영 명령 수행
+|__이미지__|앱 실행에 필요한 파일과 설정이 들어있는 읽기 전용 __템플릿__. 수정이 불가능하다(불변성)|
+|---|---|
+|__컨테이너__|이미지를 실행해 파일 시스템을 마운트하고 프로세스를 띄운 __동작 상태__. 이미지 위에 읽기-쓰기 레이어를 얹어 실행하므로, 실행 중 변경이 가능하다.|
  * 이미지: 다운로드/목록 확인
  * 컨테이너: 실행/중지/목록 확인
  * 운영: 로그 확인, 리소스 확인
@@ -242,7 +250,18 @@ latest: Pulling from library/ubuntu
 a7fb98a8eddd: Pull complete 
 Digest: sha256:678c6550cc43645e08669028bc177f50be4e7c5b8cca677067b1914d4afc7a03
 Status: Downloaded newer image for ubuntu:latest
+```
 
+ * 절대경로/상대경로
+
+|기호|의미|
+|---|---|
+|/|root|
+|./|현재위치|
+|../|상위경로|
+|~|home|
+ 
+```bash
 ***************@****** ~ % docker run -it ubuntu:latest /bin/bash     ## 내부 진입
 root@a38433a8d644:/#
 
@@ -309,34 +328,37 @@ ceca4756d3b589de1190c9029d8ad1a3253daff0624350e34655ea15d7a0da1e
 "Hello, Docker!"% 
 ```
 
-### 8. Docker 볼륨 영속성 검즘
+### 8. Docker 볼륨 영속성 검증
+|바인드마운트|호스트 시스템의 경로를 직접 공유. 호스트의 일반적인 파일 백업 도구(tar,rsync 등)를 그대로 활용할 수 있어 가장 단순하며, 로컬 개발 환경에서 매우 유용|
+|---|---|
+|볼륨|도커가 직접 생성하고 관리하는 전용공간을 사용. 백업, 데이터 이동이 편리하며, 순수 도커 환경에 적합|
 ```bash
-***************@****** ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash
+***************@****** ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash     ## my-volume으로 컨테이너 실행
 01b27320c50414dc9fa58ad0e47416203a604a1f78aff175b6c94c105d08a219
 ***************@****** ~ % docker ps -a                                                                                         
 CONTAINER ID   IMAGE           COMMAND                   CREATED         STATUS                      PORTS                                     NAMES
 01b27320c504   my-web-server   "/docker-entrypoint.…"   9 seconds ago   Up 8 seconds                0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-web
 12dd705a51f9   ubuntu:latest   "/bin/bash"               26 hours ago    Exited (137) 23 hours ago                                             hopeful_carver
-***************@****** ~ % docker exec -it my-web bash -lc "echo hi > /usr/share/nginx/html/hello.txt && cat /usr/share/nginx/html/hello.txt"
+***************@****** ~ % docker exec -it my-web bash -lc "echo hi > /usr/share/nginx/html/hello.txt && cat /usr/share/nginx/html/hello.txt"  ## 파일1 생성
 hi
 
-***************@****** ~ % docker start -a -i my-web
+***************@****** ~ % docker start -a -i my-web   # 직접 접속
 root@01b27320c504:/usr/share/nginx# cd html/
 
-root@01b27320c504:/usr/share/nginx/html# echo "test complete" > test.txt
+root@01b27320c504:/usr/share/nginx/html# echo "test complete" > test.txt    ## 파일2 생성
 root@01b27320c504:/usr/share/nginx/html# cat test.txt 
 test complete
 root@01b27320c504:/usr/share/nginx/html# exit
 exit
 
-***************@****** ~ % docker rm my-web                                                                                                 
+***************@****** ~ % docker rm my-web                                        ## 컨테이너 삭제                                                         
 my-web
-***************@****** ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash             
+***************@****** ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash    ## my-volume으로 새 컨테이너 생성
 1f96493c4c4df4fc5d80a711757a2f5f63fff392fb253bdff721020f425e9585
 
-***************@****** ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/hello.txt"
+***************@****** ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/hello.txt"     ## 파일1 확인
 hi
-***************@****** ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/test.txt" 
+***************@****** ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/test.txt"      ## 파일2 확인
 test complete
 
 ```
@@ -458,6 +480,46 @@ remote: Resolving deltas: 100% (1/1), completed with 1 local object.
 To github.com:fwb056/mydir.git
    b37d036..865d5f2  master -> fwb056-patch-1
 
+```
+
+
+### 10. 트러블슈팅 사례
+ * Repository의 메인 브랜치와 작업 브랜치를 선택해서 커밋하지 못 한 문제
+```bash
+***************@****** mydir % git push origin fwb056-patch-1
+error: src refspec fwb056-patch-1 does not match any
+error: 레퍼런스를 'github.com:fwb056/mydir.git'에 푸시하는데 실패했습니다
+
+***************@****** mydir % git push origin master:fwb056-patch-1     ## master:***** 형태로 입력해주어야 한다.
+Enter passphrase for key '/Users/***************/.ssh/id_ed25519': 
+오브젝트 나열하는 중: 6, 완료.
+오브젝트 개수 세는 중: 100% (6/6), 완료.
+Delta compression using up to 6 threads
+오브젝트 압축하는 중: 100% (4/4), 완료.
+오브젝트 쓰는 중: 100% (4/4), 752 bytes | 752.00 KiB/s, 완료.
+Total 4 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To github.com:fwb056/mydir.git
+   b37d036..865d5f2  master -> fwb056-patch-1
+```
+ * 로컬 작업공간의 커밋 취소 후 Repository의 작업 브랜치에 업로드가 되지 않는 문제
+```bash
+***************@****** mydir % git push origin master:fwb056-patch-1       ## 로컬 작업공간의 커밋을 취소한 후 버전이 맞지 않아 리포지토리의 브랜치에 업로드가 안 됨
+Enter passphrase for key '/Users/***************/.ssh/id_ed25519': 
+To github.com:fwb056/mydir.git
+ ! [rejected]        master -> fwb056-patch-1 (non-fast-forward)
+error: 레퍼런스를 'github.com:fwb056/mydir.git'에 푸시하는데 실패했습니다
+hint: Updates were rejected because a pushed branch tip is behind its remote
+hint: counterpart. If you want to integrate the remote changes, use 'git pull'
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+***************@****** mydir % git push origin master:fwb056-patch-1 --force      ## --force를 추가하여 강제로 실행시켜야 한다
+***************@****** mydir % git push origin master:fwb056-patch-1 --force
+Enter passphrase for key '/Users/***************/.ssh/id_ed25519': 
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To github.com:fwb056/mydir.git
+ + f49229e...b37d036 master -> fwb056-patch-1 (forced update)
 ```
 ---
 이하 미션 원문

@@ -311,16 +311,16 @@ ceca4756d3b589de1190c9029d8ad1a3253daff0624350e34655ea15d7a0da1e
 
 ### 8. Docker 볼륨 영속성 검즘
 ```bash
-limdh9804252257@c5r7s1 ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash
+***************@****** ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash
 01b27320c50414dc9fa58ad0e47416203a604a1f78aff175b6c94c105d08a219
-limdh9804252257@c5r7s1 ~ % docker ps -a                                                                                         
+***************@****** ~ % docker ps -a                                                                                         
 CONTAINER ID   IMAGE           COMMAND                   CREATED         STATUS                      PORTS                                     NAMES
 01b27320c504   my-web-server   "/docker-entrypoint.…"   9 seconds ago   Up 8 seconds                0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-web
 12dd705a51f9   ubuntu:latest   "/bin/bash"               26 hours ago    Exited (137) 23 hours ago                                             hopeful_carver
-limdh9804252257@c5r7s1 ~ % docker exec -it my-web bash -lc "echo hi > /usr/share/nginx/html/hello.txt && cat /usr/share/nginx/html/hello.txt"
+***************@****** ~ % docker exec -it my-web bash -lc "echo hi > /usr/share/nginx/html/hello.txt && cat /usr/share/nginx/html/hello.txt"
 hi
 
-limdh9804252257@c5r7s1 ~ % docker start -a -i my-web
+***************@****** ~ % docker start -a -i my-web
 root@01b27320c504:/usr/share/nginx# cd html/
 
 root@01b27320c504:/usr/share/nginx/html# echo "test complete" > test.txt
@@ -329,22 +329,136 @@ test complete
 root@01b27320c504:/usr/share/nginx/html# exit
 exit
 
-limdh9804252257@c5r7s1 ~ % docker rm my-web                                                                                                 
+***************@****** ~ % docker rm my-web                                                                                                 
 my-web
-limdh9804252257@c5r7s1 ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash             
+***************@****** ~ % docker run -d -it -p 8080:80 -v my-volume:/usr/share/nginx/html --name my-web my-web-server /bin/bash             
 1f96493c4c4df4fc5d80a711757a2f5f63fff392fb253bdff721020f425e9585
 
-limdh9804252257@c5r7s1 ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/hello.txt"
+***************@****** ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/hello.txt"
 hi
-limdh9804252257@c5r7s1 ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/test.txt" 
+***************@****** ~ % docker exec -it my-web bash -lc "cat usr/share/nginx/html/test.txt" 
 test complete
 
 ```
 
 ### 9. Git 설정 및 GitHub 연동
+```bash
+***************@****** ~ % git version                            ## git 버전 확인
+git version 2.53.0
+***************@****** ~ % git config --list                      ## git 설정파일 확인
+credential.helper=osxkeychain
+***************@****** ~ % git config --global user.name "fwb056"                     ## git 설정
+***************@****** ~ % git config --global user.email "***********@gmail.com" 
+***************@****** ~ % git config --list                                          # git 설정파일 확인
+credential.helper=osxkeychain
+user.name=fwb056
+user.email=***********@gmail.com
 ```
+```bash
+***************@****** ~ % cd mydir 
+***************@****** mydir % git init                           ## git 저장소 생성
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: will change to "main" in Git 3.0. To configure the initial branch name
+hint: to use in all of your new repositories, which will suppress this warning,
+hint: call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+/Users/***************/mydir/.git/ 안의 빈 깃 저장소를 다시 초기화했습니다
 ```
+```bash
+***************@****** mydir % ssh-keygen -t ed25519 -C "GitHub ***********@gmail.com"    ## ssh 키 생성
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/Users/***************/.ssh/id_ed25519): 
+Enter passphrase for "/Users/***************/.ssh/id_ed25519" (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /Users/***************/.ssh/id_ed25519
+Your public key has been saved in /Users/***************/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:******************************************* GitHub ***********@gmail.com
+The key's randomart image is:
++--[ED25519 256]--+
+|   +Bo.    o .   |
+|   . o. o =.+    |
+|   .. oo Ooo     |
+|  o .+..=+.      |
+| . ... .S.       |
+|  E +   .        |
+| . B ...         |
+|.o+o=.o.o        |
+|.*Bo++.o .       |
++----[SHA256]-----+
 
+***************@****** mydir % ls ~/.ssh/id_ed25519.pub
+/Users/***************/.ssh/id_ed25519.pub
+***************@****** mydir % cat ~/.ssh/id_ed25519.pub                       ## ssh 키 확인
+ssh-ed25519 ***********************************************************/V1/uTpKJ GitHub ***********@gmail.com
+
+***************@****** mydir % git remote add origin git@github.com:fwb056/mydir.git    ## Repository 연동
+
+```
+```bash
+
+***************@****** mydir % ls           
+bindmount	mydir		mydir.pub
+***************@****** mydir % git pull origin fwb056-patch-1                  ## Repository 브랜치 다운로드
+Enter passphrase for key '/Users/***************/.ssh/id_ed25519': 
+github.com:fwb056/mydir URL에서
+ * branch            fwb056-patch-1 -> FETCH_HEAD
+***************@****** mydir % git branch
+* master
+***************@****** mydir % ls                            
+bindmount	Dockerfile	index.html	mydir		mydir.pub	README.md
+
+```
+```bash
+***************@****** mydir % touch .gitignore                                ## .gitignore 생성
+***************@****** mydir % ls
+bindmount	Dockerfile	index.html	mydir		mydir.pub	README.md
+
+## .gitignore 작성
+# : comments
+
+# no .a files
+
+# ignore bindmount test dir
+bindmount
+
+# ignore all ssh key
+*.pub
+
+***************@****** mydir % ls -a                             # .gitignore 확인
+.		.git		bindmount	index.html	mydir.pub
+..		.gitignore	Dockerfile	mydir		README.md
+***************@****** mydir % git add *                         ## 커잇에 변경사항 저장
+다음 경로는 .gitignore 파일 중 하나 때문에 무시합니다:
+bindmount
+mydir.pub
+hint: Use -f if you really want to add them.
+hint: Disable this message with "git config set advice.addIgnoredFile false"
+***************@****** mydir % git commit -m "final test"        ## 커밋 생성
+[master 865d5f2] final test
+ 2 files changed, 9 insertions(+)
+ create mode 100644 mydir
+***************@****** mydir % git push origin master:fwb056-patch-1   ## 리포지토리에 커밋 업로드
+Enter passphrase for key '/Users/***************/.ssh/id_ed25519': 
+오브젝트 나열하는 중: 6, 완료.
+오브젝트 개수 세는 중: 100% (6/6), 완료.
+Delta compression using up to 6 threads
+오브젝트 압축하는 중: 100% (4/4), 완료.
+오브젝트 쓰는 중: 100% (4/4), 752 bytes | 752.00 KiB/s, 완료.
+Total 4 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To github.com:fwb056/mydir.git
+   b37d036..865d5f2  master -> fwb056-patch-1
+
+```
 ---
 이하 미션 원문
 ---

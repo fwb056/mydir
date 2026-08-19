@@ -343,6 +343,7 @@ test complete
 
 ### 9. Git 설정 및 GitHub 연동
 ```
+임시수정
 ```
 
 ---
